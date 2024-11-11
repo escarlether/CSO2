@@ -1,0 +1,49 @@
+Timing Calculation: In order to calculate the timings, I used clock_gettime as specified in 2.1.1.
+I would set a start time using this function, then I would set an end time after
+the function finished exectuing and then I would stubtract these two numbers to get a raw score.
+I then subtracted the overhead.
+
+Overhead calculation: In order to calculate the overhead, I warmed up nsecs(). Then, I timed how long it would take to time nothing
+using a for loop. I ran it a large number of times and then divided it by by that large number. I used this overhead
+for all of my test cases.
+
+Test case 1: I made an empty C function as instructued in 2.4 of the homework writeup.
+I then ran the function 10000 times as a warmup and then I ran it for half a second and I
+measured each run. Then, after the loop, I divided it by the number of iterations. This gave
+me an average time of 2 nanoseconds. The reason why this is so low is because the overhead and running an empyty function take almost the same amount of time
+so variation in how inefficient the overhead calculation is can cause this number to be negative.
+
+Test case 2: First, I ran getppid() 10000 times as a warmup. Then, I did the same as
+before where I made a while loop that was times for half a second's worth of gettpid.
+The loop itself was longer than half a second because I was only relying on the amount
+of time it that passed only in getppid. Then i divided the sum of time by the number of iterations
+and obtained an average of around 100 nanoseconds.
+
+Test case 3: First, I ran system("/bin/true") 1000 times as a warmup. Then I ran it in a while
+loop and computesd the time it took for each run and divided it by the number of iterations.
+This gave me an average runtime of around 950 nanoseconds.
+
+Test case 4: I made a signal handler that would stop the timer as soon as the handler 
+started executing. Then it also marked a boolean to declare that a signal had been 
+recieved and then it would return. I started by running a warmup where I sent a 
+signal to myself. Then, I would nanosleep until the boolean would be marked 
+true by the handler in which case I would move on to the next iteration. After finishing
+the warmup, I ran the actual test where I declared the start of the test, sent the signal,
+waited for the signal to be recieved, stopped the timer in the handler, set the boolean to true,
+calculated the difference, added it to my sum, and continued onto the next iteration.
+In the end, the average runtime was around 3500000 nanoseconds.
+
+Test case 5: I started this test by printing out the process's id and 
+asking that each process type in the other process's pid. I then logged the other pid as other_pid.
+It is important to type in the pid of case 5 into case -1 first because it must recieve signals and should be started first so 
+that it can do that. I also made two signal handlers. First, case 5(sigusr1) will send a signal to case -1(sigusr2). Then case 5 will waited
+until it recieves a signal and its signal handler is executed. That is when the end time will be assigned and the recieved boolean will become true.  
+Once the boolean is true, case 5 will stop nanosleeping, make the boolean false, and go onto the next iteration.
+Then we calculate the timing between the start and the end and find the average after running this many times. 
+In the end, the average run time was around 6500 nanoseconds.
+
+Average Case 1: 2 nanoseconds 
+Average Case 2: 92 nanoseconds  
+Average Case 3: 3683928 nanoseconds 
+Average Case 4: 937 nanoseconds 
+Average Case 5: 6534 nanoseconds 
