@@ -1,0 +1,12 @@
+GNU General Public License: This license allows any user to freely use and
+change this software without any limitations or restrictions. I did not choose this because
+I thought that it was not simple enough and no one would want to read it.
+
+The 3-Clause BSD License: This license is simple and clearly communicates the essential
+information that encompasses a free piece of software. I chose this license because of its
+simplicity and because it included a protective statement for the copyright holder.
+
+Boost Software License: This licese is very similar to the previous two but it mainly
+focuses on allowing anyone to use the software without restrictionn instead of protecting
+me as the copyright holder. I did not choose this because I do not want to be liable for
+anything that someone else makes with this code.

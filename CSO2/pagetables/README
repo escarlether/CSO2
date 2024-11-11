@@ -1,0 +1,49 @@
+Config.h:
+    Ints only have space for 64 bits, so make sure to take this into account when trying to to cusomtize POBITS and LEVELS, 
+    each level has a VPN that takes up POBITS - 3 bits. So, as long as POBITS + LEVELS * (POBITS - 3) <= 64, any combination should work. 
+    LEVELS should be between 1 to 6 inclusive and POBITS is between 4 and 18 inclusive.
+    
+
+Suggestions for future expansion:
+    Some potential suggestions for future expansion would be to make this support more levels and larger pages.
+
+Big-O analysis (time).
+    Time Complexity: O(LEVELS)
+
+Description of any testing hooks you added:
+    None
+
+Deallocate
+    Deallocate assumes that you would like to deallocate a page on the last level. Deallocte simply frees the last level page
+    and then it sets that page to be invalid.
+    
+Code samples for how to use this library:
+
+    int main() {
+    // 0 pages have been allocated
+    assert(ptbr == 0);
+
+    page_allocate(0x456789abcdef);
+    // 5 pages have been allocated: 4 page tables and 1 data
+    assert(ptbr != 0);
+
+    page_allocate(0x456789abcd00);
+    // no new pages allocated (still 5)
+    
+    int *p1 = (int *)translate(0x456789abcd00);
+    *p1 = 0xaabbccdd;
+    short *p2 = (short *)translate(0x456789abcd02);
+    printf("%04hx\n", *p2); // prints "aabb\n"
+
+    assert(translate(0x456789ab0000) == 0xFFFFFFFFFFFFFFFF);
+    
+    page_allocate(0x456789ab0000);
+    // 1 new page allocated (now 6; 4 page table, 2 data)
+
+    assert(translate(0x456789ab0000) != 0xFFFFFFFFFFFFFFFF);
+    
+    page_allocate(0x456780000000);
+    // 2 new pages allocated (now 8; 5 page table, 3 data)
+}
+
+
